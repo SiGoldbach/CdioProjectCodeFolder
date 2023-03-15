@@ -10,7 +10,7 @@ while 1:
         break
     cv.imshow('Read picture', image)
     if cv.waitKey(1) & 0xFF == ord('q'):
-        cv.imwrite('Resources/Pictures/four.jpg', image)
+        cv.imwrite('Resources/Pictures/withRobot.jpg', image)
         break
 
 videoCapture.release()
