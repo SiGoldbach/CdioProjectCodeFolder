@@ -31,6 +31,7 @@ i_counter = 0
 j_counter = 0
 img_height, img_width, _ = image.shape
 red_pixels = 0
+white_pixels = 0
 maxVal = list
 
 for i in range(img_height):
@@ -40,18 +41,37 @@ for i in range(img_height):
             red_pixels += 1
             blank[i][j][2] = 255
         if 180 <= image[i][j][0] and 180 <= image[i][j][1] and 180 <= image[i][j][2]:
+            white_pixels += 1
             blank[i][j][0] = 255
             blank[i][j][1] = 255
             blank[i][j][2] = 255
 # Here I will try to find the four corners by finding extreme red values
-
 end = time.time()
+im_gray = cv.cvtColor(blank, cv.COLOR_BGR2GRAY)
+ret, thresh = cv.threshold(im_gray, 127, 255, 0)
+contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+circles2 = 0
+for cnt in contours:
+    approx = cv.approxPolyDP(cnt, .03 * cv.arcLength(cnt, True), True)
+    k = cv.isContourConvex(approx)
+    if k:
+        circles2 += 1
+        M = cv.moments(cnt)
+        cX = int(M["m10"] / M["m00"])
+        cY = int(M["m01"] / M["m00"])
+        print("Center of this circle should be: " + str(cX) + " " + str(cY))
+        cv.circle(blank, (cX, cY), 7, (255, 0, 0), -1)
+
+print("Contour length: " + str(len(contours)))
 
 timeForTransform = end - start
 print('time for transform: ' + str(timeForTransform))
 print("Amount of red pixels: " + str(red_pixels))
+print("Amount of white pixels: " + str(white_pixels))
+print("Amount of circles: " + str(circles2))
+
 cv.imshow('Original', image)
-cv.imshow('BetterModel', blank)
+cv.imshow('Obstacles and balls drawn: ', blank)
 
 # cv.imshow('StartModel', blank)
 cv.waitKey(0)
