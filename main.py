@@ -16,5 +16,20 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 ev3 = EV3Brick()
 
 
+
+
 # Write your program here.
 ev3.speaker.beep()
+test_motor = Motor(Port.C)
+test_motor.run_target(700, 3000)
+test_mot = Motor(Port.D)
+# this is a good motor-speed for the delivering of balls
+test_mot.run_target(300, 100)
+# the wait function in milliseconds. 
+wait(3000)
+# make ramp close at good speed and angle
+test_mot.run_target(250, -90)
+
+
+
+
