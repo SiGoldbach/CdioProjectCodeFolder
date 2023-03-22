@@ -13,7 +13,7 @@ class Field:
     ball_amount = 0
 
 
-image = cv.imread('Resources/Pictures/fieldWithBalls.jpg')
+image = cv.imread('Resources/Pictures/withRobot.jpg')
 print(image[0][0])
 # cv.imshow('Read picture', image)
 img_hsv = cv.cvtColor(image, cv.COLOR_BGR2HSV)
@@ -51,6 +51,7 @@ im_gray = cv.cvtColor(blank, cv.COLOR_BGR2GRAY)
 ret, thresh = cv.threshold(im_gray, 127, 255, 0)
 contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 circles2 = 0
+circles_list = []
 for cnt in contours:
     approx = cv.approxPolyDP(cnt, .03 * cv.arcLength(cnt, True), True)
     k = cv.isContourConvex(approx)
@@ -61,8 +62,30 @@ for cnt in contours:
         cY = int(M["m01"] / M["m00"])
         print("Center of this circle should be: " + str(cX) + " " + str(cY))
         cv.circle(blank, (cX, cY), 7, (255, 0, 0), -1)
+        circles_list.append([(cX, cY)])
+# Now to find the big square
+edges = cv.Canny(im_gray, 50, 150, apertureSize=3)
+lines = cv.HoughLinesP(
+    edges,  # Input edge image
+    1,  # Distance resolution in pixels
+    np.pi / 180,  # Angle resolution in radians
+    threshold=100,  # Min number of votes for valid line
+    minLineLength=5,  # Min allowed length of line
+    maxLineGap=10  # Max allowed gap between line for joining them
+)
+
+lines_list = []
+for points in lines:
+    # Extracted points nested in the list
+    x1, y1, x2, y2 = points[0]
+    # Draw the lines joing the points
+    # On the original image
+    cv.line(blank, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    # Maintain a simples lookup list for points
+    lines_list.append([(x1, y1), (x2, y2)])
 
 print("Contour length: " + str(len(contours)))
+print("Line amount: " + str(len(lines_list)))
 
 timeForTransform = end - start
 print('time for transform: ' + str(timeForTransform))
