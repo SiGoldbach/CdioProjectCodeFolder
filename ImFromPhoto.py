@@ -13,7 +13,7 @@ class Field:
     ball_amount = 0
 
 
-image = cv.imread('Resources/Pictures/withRobot.jpg')
+image = cv.imread('Resources/Pictures/fieldWithBalls.jpg')
 print(image[0][0])
 # cv.imshow('Read picture', image)
 img_hsv = cv.cvtColor(image, cv.COLOR_BGR2HSV)
