@@ -18,7 +18,7 @@ def find_intersection(a1, b1, a2, b2):
     # print(solution)
 
 
-img = cv.imread('Resources/Pictures/withRobot2.jpg', cv.IMREAD_GRAYSCALE)
+img = cv.imread('Resources/Pictures/fieldWithBalls.jpg', cv.IMREAD_GRAYSCALE)
 assert img is not None, "file could not be read, check with os.path.exists()"
 img = cv.medianBlur(img, 5)
 cimg = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
