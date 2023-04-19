@@ -1,3 +1,5 @@
+from main import *
+import math
 
 class GameInfo:
     y, yr, ysm, ylm = 0, 0, 0, 0
@@ -11,6 +13,8 @@ class GameInfo:
     goalLocationLarge = [xlm, ylm]
     totalBalls = len(ballsLocation)
     ballsRemaining = int(totalBalls - ballsCollected)
+    robot.move.forward(main)
+
 
 # created fake scenario for the robot
 Game1 = GameInfo()
@@ -31,17 +35,49 @@ Game1.totalBalls = len(Game1.ballsLocation)
 Game1.ballsRemaining = int(Game1.totalBalls - Game1.ballsCollected)
 
 gameWon = 0
+def playGame():
+    if gameWon == 0:
 
-if gameWon == 0:
+        if Game1.ballsRemaining == 0:
+            # moving to small goal
+            Game1.robotLocation = Game1.goalLocationSmall
+            #  do: unload function
+            Game1.ballsDelivered = Game1.ballsCollected
+            gameWon = 1
+        else:
+            i = 0
+        for i in Game1.ballsLocation:
+        # nextMove = robotLocation-ballsLocation[i]
+            dx = x-xr
+            dy = y-yr
+            if dx != 0 and dy != 0
+                angle_radian = math.atan2(dx, dy)
+                angle_degree = math.degrees(angle_radian)
+                # find out how it returns the degree as if we have to turn left or right
+                turn.right(angle_degree)
+                distance_to_move = (sqrt((x*x)+(y*y)))
+                robot.move.forward(distance_to_move)
 
-    if Game1.ballsRemaining == 0:
-        Game1.robotLocation = Game1.goalLocationSmall
-        #  do: unload function
-        Game1.ballsDelivered = Game1.ballsCollected
-        gameWon = 1
-    else:
-        i = 0
-    for i in Game1.ballsLocation:
+            if dx = 0 and yx != 0
+                angle_radian = math.atan2(dx, dy)
+                angle_degree = math.degrees(angle_radian)
+                # find out how it returns the degree as if we have to turn left or right
+                turn.right(angle_degree)
+                distance_to_move = (sqrt((x*x)+(y*y)))
+                robot.move.forward(distance_to_move)
+
+            if dx != 0 and yx = 0
+                angle_radian = math.atan2(dx, dy)
+                angle_degree = math.degrees(angle_radian)
+                # find out how it returns the degree as if we have to turn left or right
+                turn.right(angle_degree)  
+                distance_to_move = (sqrt((x*x)+(y*y)))
+                robot.move.forward(distance_to_move)
+                
+
+    
+
+
         Game1.robotLocation = i
         Game1.ballsCollected += 1
 
@@ -49,3 +85,5 @@ if gameWon == 0:
 if gameWon == 1:
     print("we did it")
     # play winner music
+
+
