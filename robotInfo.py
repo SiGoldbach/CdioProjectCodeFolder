@@ -1,8 +1,7 @@
 
-
 class GameInfo:
-    y, yr, ysm, ylm = int
-    x, xr, xsm, xlm = int
+    y, yr, ysm, ylm = 0, 0, 0, 0
+    x, xr, xsm, xlm = 200, 0, 0, 0
     robotLocation = [xr, yr]
     ballsLocation = [x, y]
     robotStartLocation = [10, 1]
@@ -15,15 +14,15 @@ class GameInfo:
 
 # created fake scenario for the robot
 Game1 = GameInfo()
-y, yr, ysm, ylm = int
-x, xr, xsm, xlm = int
+y, yr, ysm, ylm = 0, 0, 0, 0
+x, xr, xsm, xlm = 0, 0, 0, 0
 Game1.robotStartLocation = [10, 1]
 Game1.robotLocation = [xr, yr]
 Game1.ysm = 10
 Game1.xsm = 1
 Game1.xlm = 20
 Game1.ylm = 10
-Game1.ballsCollected = int
+Game1.ballsCollected = 0
 Game1.ballsDelivered = 0
 Game1.goalLocationSmall = [xsm, ysm]
 Game1.goalLocationLarge = [xlm, ylm]
@@ -44,7 +43,7 @@ if gameWon == 0:
         i = 0
     for i in Game1.ballsLocation:
         Game1.robotLocation = i
-        Game1.ballsCollected + 1
+        Game1.ballsCollected += 1
 
 
 if gameWon == 1:
