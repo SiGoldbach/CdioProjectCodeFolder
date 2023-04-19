@@ -49,30 +49,31 @@ def playGame():
         for i in Game1.ballsLocation:
         # nextMove = robotLocation-ballsLocation[i]
             dx = x-xr
-            xy = y-yr
-            if dx != 0 and yx != 0
-                angle_radian = math.atan2(dx, yx)
-                angle_degree = math.degree(angle_radian)
+            dy = y-yr
+            if dx != 0 and dy != 0
+                angle_radian = math.atan2(dx, dy)
+                angle_degree = math.degrees(angle_radian)
                 # find out how it returns the degree as if we have to turn left or right
                 turn.right(angle_degree)
-                distance_to_move = ((x*x)+(y*y)/2)
+                distance_to_move = (sqrt((x*x)+(y*y)))
                 robot.move.forward(distance_to_move)
 
             if dx = 0 and yx != 0
-                angle_radian = math.atan2(dx, yx)
-                angle_degree = math.degree(angle_radian)
+                angle_radian = math.atan2(dx, dy)
+                angle_degree = math.degrees(angle_radian)
                 # find out how it returns the degree as if we have to turn left or right
                 turn.right(angle_degree)
-                distance_to_move = (yx)
+                distance_to_move = (sqrt((x*x)+(y*y)))
                 robot.move.forward(distance_to_move)
 
             if dx != 0 and yx = 0
-                angle_radian = math.atan2(dx, yx)
-                angle_degree = math.degree(angle_radian)
+                angle_radian = math.atan2(dx, dy)
+                angle_degree = math.degrees(angle_radian)
                 # find out how it returns the degree as if we have to turn left or right
-                turn.right(angle_degree)
-                distance_to_move = (dx)
+                turn.right(angle_degree)  
+                distance_to_move = (sqrt((x*x)+(y*y)))
                 robot.move.forward(distance_to_move)
+                
 
     
 
