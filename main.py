@@ -20,27 +20,8 @@ right_wheel_motor = Motor(Port.B)
 convey_motor = Motor(Port.C)
 ramp_motor = Motor(Port.D)
 
-gameWon = 0
-def playGame():
-    if gameWon == 0:
 
-        if Game1.ballsRemaining == 0:
-            # moving to small goal
-            Game1.robotLocation = Game1.goalLocationSmall
-            #  do: unload function
-            Game1.ballsDelivered = Game1.ballsCollected
-            gameWon = 1
-        else:
-            i = 0
-        for i in Game1.ballsLocation:
-        # nextMove = robotLocation-ballsLocation[i]
-            dx = x-xr
-            xy = y-yr
-            if xd < 0 and yx <0
-                turn.move.face(x)
-                robot.move.forward(dx)
-                turn.move.face(y)
-                robot.move.forward(xy)
+
 
 # method to make both wheels drive.
 # convey_motor.run_angle(700,30000,wait=False)
