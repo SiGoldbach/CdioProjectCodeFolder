@@ -6,7 +6,7 @@ import commandEnum
 
 # Class that encapsulates the move into a type and the potential argument that it comes with
 # Here speed is only speed
-# Argument can be angle or time
+# Argument can be an angle or time
 class MoveClass:
     def __init__(self, my_type, my_speed, my_argument):
         self.my_type = my_type
