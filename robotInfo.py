@@ -1,4 +1,3 @@
-from main import *
 import math
 import main
 
