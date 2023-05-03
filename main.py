@@ -6,6 +6,8 @@ from pybricks.parameters import Port, Stop, Direction, Button, Color
 from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
+from threading import Thread
+import sys
 
 # from robotInfo import GameInfo
 
@@ -23,20 +25,20 @@ convey_motor = Motor(Port.C)
 ramp_motor = Motor(Port.D)
 
 
-# robotTurnRight(200, 175, left_wheel_motor, right_wheel_motor) is equal to a 90 degrees right turn
-def robotTurnRight(speed, ang):
+# TurnRight(200, 750) is equal to a 180 degrees right turn
+def turnRight(speed, ang):
     left_wheel_motor.run_angle(speed, ang, wait=False)
     right_wheel_motor.run_angle(speed, -ang)
 
-# a robotTurnLeft(200, 165, left_wheel_motor, right_wheel_motor) is equal to 90 degrees left turn
-def robotTurnLeft(speed, ang):
+# a TurnLeft(200, 800) is equal to 180 degrees left turn
+def turnLeft(speed, ang):
     left_wheel_motor.run_angle(speed, -ang, wait=False)
     right_wheel_motor.run_angle(speed, ang)
 
 # method to move forwards
-def moveForward(speed, ang):
-   left_wheel_motor.run_angle(speed, ang, wait=False)
-   right_wheel_motor.run_angle(speed, ang)
+def moveForward(speed, dist):
+   left_wheel_motor.run_angle(speed, dist, wait=False)
+   right_wheel_motor.run_angle(speed, dist)
 
 # method to move backwards
 def moveBackward(speed, distance):
@@ -51,15 +53,22 @@ def openCloseHatch():
 
 # collecting the balls at a good speed for a given time
 def collectBalls(time):
-    convey_motor.run_target(700, time)
+    convey_motor.run_target(700, time, wait=False)
 
 # remove stuck balls if there is any
 def unstuckBall():
     convey_motor.run_target(200, -1000)
 
-#Write your program here.
-
+# Write your program here.
 ev3.speaker.beep()
-robotTurnRight(400,400)
 
-        
+# Start the program
+collectBalls(10000)
+# moveBackward(600, 200)
+# turnRight(200, 175)
+moveForward(600, 3000)
+turnLeft(200, 800)
+moveForward(600, 2500)
+turnRight(200, 750)
+moveBackward(600, 500)
+openCloseHatch()
