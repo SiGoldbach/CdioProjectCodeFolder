@@ -29,6 +29,7 @@ ramp_motor = Motor(Port.D)
 # robot = DriveBase(left_wheel_motor, right_wheel_motor, wheel_diameter=55.5, axle_track=104)
 
 def main():
+    
     next_move = MoveFinder.find_move()
     match next_move.my_type:
         case commandEnum.MoveType.RIGHT:
