@@ -29,8 +29,37 @@ ramp_motor = Motor(Port.D)
 
 
 
-# TurnRight(200, 750) is equal to a 180 degrees right turn
-def turnRight(speed, ang):
+
+
+
+
+# method to make both wheels drive.
+# convey_motor.run_angle(700,30000,wait=False)
+# robot = DriveBase(left_wheel_motor, right_wheel_motor, wheel_diameter=55.5, axle_track=104)
+
+def main():
+    next_move = MoveFinder.find_move()
+    match next_move.my_type:
+        case commandEnum.MoveType.RIGHT:
+            robotTurnRight(next_move.speed, next_move.argument)
+        case commandEnum.MoveType.LEFT:
+            robotTurnLeft(next_move.speed, next_move.argument)
+        case commandEnum.MoveType.START_CONVEYER:
+            collectBalls(next_move.argument)
+        case commandEnum.MoveType.DELIVER:
+            openCloseHatch()
+        case commandEnum.MoveType.BACKWARD:
+            moveBackward(next_move.speed, next_move.argument)
+        case commandEnum.MoveType.FORWARD:
+            moveForward(next_move.speed, next_move.argument)
+        case commandEnum.MoveType.UNSTUCK:
+            unstuckBall()
+
+    print("The game has started")
+
+
+# robotTurnRight(200, 175, left_wheel_motor, right_wheel_motor) is equal to a 90 degrees right turn
+def robotTurnRight(speed, ang):
     left_wheel_motor.run_angle(speed, ang, wait=False)
     right_wheel_motor.run_angle(speed, -ang)
 
