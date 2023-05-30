@@ -51,14 +51,22 @@ def main():
 
 
 # robotTurnRight(200, 175, left_wheel_motor, right_wheel_motor) is equal to a 90 degrees right turn
-def robotTurnRight(speed, ang):
-    left_wheel_motor.run_angle(speed, ang, wait=False)
-    right_wheel_motor.run_angle(speed, -ang)
+#def robotTurnRight(speed, ang):
+ #   left_wheel_motor.run_angle(speed, ang, wait=False)
+  #  right_wheel_motor.run_angle(speed, -ang)
 
 # a TurnLeft(200, 800) is equal to 180 degrees left turn
-def turnLeft(speed, ang):
-    left_wheel_motor.run_angle(speed, -ang, wait=False)
-    right_wheel_motor.run_angle(speed, ang)
+#def turnLeft(speed, ang):
+ #   left_wheel_motor.run_angle(speed, -ang, wait=False)
+  #  right_wheel_motor.run_angle(speed, ang)
+
+def turn(speed, ang):
+    if ang >= 0:
+        left_wheel_motor.run_angle(speed, -ang, wait=False)
+        right_wheel_motor.run_angle(speed, ang)
+    else:
+        left_wheel_motor.run_angle(speed, ang, wait=False)
+        right_wheel_motor.run_angle(speed, -ang)
 
 # method to move forwards
 def moveForward(speed, dist):
@@ -66,9 +74,9 @@ def moveForward(speed, dist):
    right_wheel_motor.run_angle(speed, dist)
 
 # method to move backwards
-def moveBackward(speed, distance):
-    right_wheel_motor.run_angle(speed, -distance, wait=False)
-    left_wheel_motor.run_angle(speed, -distance)
+def moveBackward(speed, dist):
+    right_wheel_motor.run_angle(speed, -dist, wait=False)
+    left_wheel_motor.run_angle(speed, -dist)
 
 # make ramp open and clsoe at good speed and angle
 def openCloseHatch():
@@ -92,8 +100,10 @@ collectBalls(10000)
 # moveBackward(600, 200)
 # turnRight(200, 175)
 moveForward(600, 3000)
-turnLeft(200, 800)
+# turnLeft(200, 800)
+turn(200, 800)
 moveForward(600, 2500)
-turnRight(200, 750)
+# turnRight(200, 750)
+turn(200, -750)
 moveBackward(600, 500)
 openCloseHatch()
