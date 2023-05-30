@@ -25,14 +25,6 @@ convey_motor = Motor(Port.C)
 ramp_motor = Motor(Port.D)
 
 
-
-
-
-
-
-
-
-
 # method to make both wheels drive.
 # convey_motor.run_angle(700,30000,wait=False)
 # robot = DriveBase(left_wheel_motor, right_wheel_motor, wheel_diameter=55.5, axle_track=104)
@@ -100,10 +92,8 @@ collectBalls(10000)
 # moveBackward(600, 200)
 # turnRight(200, 175)
 moveForward(600, 3000)
-turnLeft(200, 900)
+turnLeft(200, 800)
 moveForward(600, 2500)
-turnRight(200, 850)
+turnRight(200, 750)
 moveBackward(600, 500)
 openCloseHatch()
-
-
