@@ -13,7 +13,9 @@ class Field:
     ball_amount = 0
 
 
-image = cv.imread('Resources/Pictures/fieldWithBalls.jpg')
+image = cv.imread('Resources/Pictures/withRobot7.jpg')
+if image is None:
+    print("No image found")
 print(image[0][0])
 # cv.imshow('Read picture', image)
 img_hsv = cv.cvtColor(image, cv.COLOR_BGR2HSV)
@@ -32,19 +34,33 @@ j_counter = 0
 img_height, img_width, _ = image.shape
 red_pixels = 0
 white_pixels = 0
+green_pixels = 0
 maxVal = list
 
 for i in range(img_height):
     for j in range(img_width):
         # detecting walls
-        if 155 <= image[i][j][2] <= 255 and 0 <= image[i][j][0] <= 100 and 0 <= image[i][j][1] <= 100:
-            red_pixels += 1
-            blank[i][j][2] = 255
-        if 180 <= image[i][j][0] and 180 <= image[i][j][1] and 180 <= image[i][j][2]:
-            white_pixels += 1
-            blank[i][j][0] = 255
+        if image[i][j][2] <= 70 and image[i][j][0] <= 70 and 0 <= image[i][j][1] <= 70:
+            # Detected green square
+            blank[i][j][0] = 0
             blank[i][j][1] = 255
             blank[i][j][2] = 255
+            cv.rectangle(blank, (j, i), (j, i), (0, 255, 255), 1)
+            green_pixels += 1
+        if 210 <= image[i][j][2] and 120 >= image[i][j][0] and 155 <= image[i][j][1]:
+            blank[i][j][0] = 0
+            blank[i][j][1] = 150
+            blank[i][j][2] = 255
+        if 200 <= image[i][j][2]:
+            red_pixels += 1
+            blank[i][j][2] = 255
+        if 210 <= image[i][j][0] and 210 <= image[i][j][1] and 205 <= image[i][j][2]:
+            white_pixels += 1
+            blank[i][j][0] = 255
+            blank[i][j][1] = 0
+            blank[i][j][2] = 0
+            cv.circle(blank, (j,i), 1, (255, 0, 0), -1)
+
 # Here I will try to find the four corners by finding extreme red values
 end = time.time()
 im_gray = cv.cvtColor(blank, cv.COLOR_BGR2GRAY)
@@ -53,7 +69,7 @@ contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMP
 circles2 = 0
 circles_list = []
 for cnt in contours:
-    approx = cv.approxPolyDP(cnt, .03 * cv.arcLength(cnt, True), True)
+    approx = cv.approxPolyDP(cnt, 0.5 * cv.arcLength(cnt, True), True)
     k = cv.isContourConvex(approx)
     if k:
         circles2 += 1
@@ -63,6 +79,8 @@ for cnt in contours:
         print("Center of this circle should be: " + str(cX) + " " + str(cY))
         cv.circle(blank, (cX, cY), 7, (255, 0, 0), -1)
         circles_list.append([(cX, cY)])
+
+
 # Now to find the big square
 edges = cv.Canny(im_gray, 50, 150, apertureSize=3)
 lines = cv.HoughLinesP(
@@ -75,14 +93,15 @@ lines = cv.HoughLinesP(
 )
 
 lines_list = []
-for points in lines:
-    # Extracted points nested in the list
-    x1, y1, x2, y2 = points[0]
-    # Draw the lines joing the points
-    # On the original image
-    cv.line(blank, (x1, y1), (x2, y2), (0, 255, 0), 2)
-    # Maintain a simples lookup list for points
-    lines_list.append([(x1, y1), (x2, y2)])
+if lines is not None:
+    for points in lines:
+        # Extracted points nested in the list
+        x1, y1, x2, y2 = points[0]
+        # Draw the lines joing the points
+        # On the original image
+        cv.line(blank, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        # Maintain a simples lookup list for points
+        lines_list.append([(x1, y1), (x2, y2)])
 
 print("Contour length: " + str(len(contours)))
 print("Line amount: " + str(len(lines_list)))
