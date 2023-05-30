@@ -2,10 +2,23 @@ import math
 import main
 
 
-class GameInfo:
-    y, yr, ysm, ylm = 0, 0, 0, 0
-    x, xr, xsm, xlm = 200, 0, 0, 0
-    robotLocation = [xr, yr]
+# Here we use geometry and the input from camera to find the preferred move. 
+class CalculateMove:
+    GameLogic
+    
+# Find a concentrated area of red pixels that 
+# Insure that if an obstacle is located in the path of the calculateMove how to handle. 
+class AvoidRedPixel:
+
+
+
+# Here we manage how many balls are left
+# Location of goals.   
+
+class GameLogic:
+    y, robot_y, ysm, ylm = 0, 0, 0, 0
+    x, robot_x, xsm, xlm = 0, 0, 0, 0
+    robotLocation = [robot_x, robot_y]
     ballsLocation = [x, y]
     robotStartLocation = [10, 1]
     ballsDelivered = 0
@@ -14,15 +27,15 @@ class GameInfo:
     goalLocationLarge = [xlm, ylm]
     totalBalls = len(ballsLocation)
     ballsRemaining = int(totalBalls - ballsCollected)
-    main.moveForward()
-
-
+    
+    
+    
 # created fake scenario for the robot
-Game1 = GameInfo()
-y, yr, ysm, ylm = 0, 0, 0, 0
-x, xr, xsm, xlm = 0, 0, 0, 0
+Game1 = GameLogic()
+y, robot_y, ysm, ylm = 0, 0, 0, 0
+x, robot_x, xsm, xlm = 0, 0, 0, 0
 Game1.robotStartLocation = [10, 1]
-Game1.robotLocation = [xr, yr]
+Game1.robotLocation = [robot_x, robot_y]
 Game1.ysm = 10
 Game1.xsm = 1
 Game1.xlm = 20

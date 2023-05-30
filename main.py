@@ -25,6 +25,10 @@ convey_motor = Motor(Port.C)
 ramp_motor = Motor(Port.D)
 
 
+
+
+
+
 # TurnRight(200, 750) is equal to a 180 degrees right turn
 def turnRight(speed, ang):
     left_wheel_motor.run_angle(speed, ang, wait=False)
@@ -67,8 +71,10 @@ collectBalls(10000)
 # moveBackward(600, 200)
 # turnRight(200, 175)
 moveForward(600, 3000)
-turnLeft(200, 800)
+turnLeft(200, 900)
 moveForward(600, 2500)
-turnRight(200, 750)
+turnRight(200, 850)
 moveBackward(600, 500)
 openCloseHatch()
+
+
