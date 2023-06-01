@@ -13,7 +13,7 @@ class Field:
     ball_amount = 0
 
 
-image = cv.imread('Resources/Pictures/withRobot8.jpg')
+image = cv.imread('Resources/Pictures/withRobot9.jpg')
 if image is None:
     print("No image found")
 print(image[0][0])
@@ -40,13 +40,22 @@ maxVal = list
 for i in range(img_height):
     for j in range(img_width):
         # detecting walls
-        if image[i][j][2] <= 70 and image[i][j][0] <= 70 and 0 <= image[i][j][1] <= 70:
+
+        if image[i][j][0] <= 220 and 40 <= image[i][j][1] <= 100 and 25 <= image[i][j][2] <= 80:
             # Detected green square
             blank[i][j][0] = 0
-            blank[i][j][1] = 255
-            blank[i][j][2] = 255
+            blank[i][j][1] = 0
+            blank[i][j][2] = 0
             cv.rectangle(blank, (j, i), (j, i), (0, 255, 255), 1)
-            green_pixels += 1
+
+
+        if image[i][j][0] <= 120 and 150 <= image[i][j][1] <= 200 and 75 <= image[i][j][2] <= 110:
+            # Detected green square
+            blank[i][j][0] = 0
+            blank[i][j][1] = 0
+            blank[i][j][2] = 0
+            cv.rectangle(blank, (j, i), (j, i), (255, 255, 255), 1)
+            
         if 200 <= image[i][j][2] and 100 >= image[i][j][1]:
             red_pixels += 1
             blank[i][j][2] = 255
@@ -93,7 +102,7 @@ if detected_circles is not None:
         circles2 += 1
         # Draw the circumference of the circle.
         cv.circle(blank, (a, b), r, (0, 255, 0), 2)
-  
+        print("Center of this circle should be: " + str(a) + " " + str(b))
         # Draw a small circle (of radius 1) to show the center.
         cv.circle(blank, (a, b), 1, (0, 0, 255), 3)
 
