@@ -13,7 +13,7 @@ class Field:
     ball_amount = 0
 
 
-image = cv.imread('Resources/Pictures/withRobot7.jpg')
+image = cv.imread('Resources/Pictures/withRobot8.jpg')
 if image is None:
     print("No image found")
 print(image[0][0])
@@ -47,14 +47,17 @@ for i in range(img_height):
             blank[i][j][2] = 255
             cv.rectangle(blank, (j, i), (j, i), (0, 255, 255), 1)
             green_pixels += 1
-        if 210 <= image[i][j][2] and 120 >= image[i][j][0] and 155 <= image[i][j][1]:
+        if 200 <= image[i][j][2] and 100 >= image[i][j][1]:
+            red_pixels += 1
+            blank[i][j][2] = 255
+        if 190 <= image[i][j][2] and 120 >= image[i][j][0] and 155 <= image[i][j][1]:
             blank[i][j][0] = 0
             blank[i][j][1] = 150
             blank[i][j][2] = 255
         if 200 <= image[i][j][2]:
             red_pixels += 1
             blank[i][j][2] = 255
-        if 210 <= image[i][j][0] and 210 <= image[i][j][1] and 205 <= image[i][j][2]:
+        if 200 <= image[i][j][0] and 210 <= image[i][j][1] and 210 <= image[i][j][2]:
             white_pixels += 1
             blank[i][j][0] = 255
             blank[i][j][1] = 0
@@ -63,22 +66,49 @@ for i in range(img_height):
 
 # Here I will try to find the four corners by finding extreme red values
 end = time.time()
-im_gray = cv.cvtColor(blank, cv.COLOR_BGR2GRAY)
+im_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 ret, thresh = cv.threshold(im_gray, 127, 255, 0)
 contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 circles2 = 0
 circles_list = []
-for cnt in contours:
-    approx = cv.approxPolyDP(cnt, 0.5 * cv.arcLength(cnt, True), True)
-    k = cv.isContourConvex(approx)
-    if k:
+
+gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+  
+# Blur using 3 * 3 kernel.
+gray_blurred = cv.blur(gray, (3, 3))
+  
+# Apply Hough transform on the blurred image.
+detected_circles = cv.HoughCircles(gray_blurred, 
+                   cv.HOUGH_GRADIENT, 1, 20, param1 = 60,
+               param2 = 20, minRadius = 1, maxRadius = 10)
+  
+# Draw circles that are detected.
+if detected_circles is not None:
+  
+    # Convert the circle parameters a, b and r to integers.
+    detected_circles = np.uint16(np.around(detected_circles))
+  
+    for pt in detected_circles[0, :]:
+        a, b, r = pt[0], pt[1], pt[2]
         circles2 += 1
-        M = cv.moments(cnt)
-        cX = int(M["m10"] / M["m00"])
-        cY = int(M["m01"] / M["m00"])
-        print("Center of this circle should be: " + str(cX) + " " + str(cY))
-        cv.circle(blank, (cX, cY), 7, (255, 0, 0), -1)
-        circles_list.append([(cX, cY)])
+        # Draw the circumference of the circle.
+        cv.circle(blank, (a, b), r, (0, 255, 0), 2)
+  
+        # Draw a small circle (of radius 1) to show the center.
+        cv.circle(blank, (a, b), 1, (0, 0, 255), 3)
+
+   
+#for cnt in contours:
+#    approx = cv.approxPolyDP(cnt, 0.1 * cv.arcLength(cnt, True), True)
+#   k = cv.isContourConvex(approx)
+#    if k:
+#        circles2 += 1
+#        M = cv.moments(cnt)
+#        cX = int(M["m10"] / M["m00"])
+#        cY = int(M["m01"] / M["m00"])
+#        print("Center of this circle should be: " + str(cX) + " " + str(cY))
+#        cv.circle(blank, (cX, cY), 7, (255, 0, 0), -1)
+#        circles_list.append([(cX, cY)])
 
 
 # Now to find the big square
@@ -93,7 +123,7 @@ lines = cv.HoughLinesP(
 )
 
 lines_list = []
-if lines is not None:
+if lines is None:
     for points in lines:
         # Extracted points nested in the list
         x1, y1, x2, y2 = points[0]
