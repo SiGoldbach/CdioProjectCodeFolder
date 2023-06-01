@@ -22,7 +22,7 @@ class MoveClass:
 def find_move() -> MoveClass:
     move = MoveClass(commandEnum.MoveType.RIGHT, 500, 100)
     move.print()
-    return move    
+    return move
 
 
 find_move()
