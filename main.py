@@ -82,10 +82,15 @@ for i in range(10):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(("10.209.192.170", 5000))
     sock.send(b"GET /test HTTP/1.1\r\nHost:10.209.192.170\r\n\r\n")
-    response = sock.recv(4096)
-    print(response.decode())
+    response = ''
+    while True:
+        data = sock.recv(1024)
+        if not data:
+            break
+        response += data.decode('utf-8')
+    headers, body = response.split('\r\n\r\n', 1)
+    print(body)
     moveForward(500, 200)
-    time.sleep(1)
     sock.close()
 
 # Start the program
