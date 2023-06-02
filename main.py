@@ -10,6 +10,7 @@ from threading import Thread
 import sys
 import subprocess
 import json
+import MoveFinder
 # from robotInfo import GameInfo
 
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
@@ -78,7 +79,7 @@ def unstuckBall():
 # Write your program here.
 
 ev3.speaker.beep()
-for i in range(10):
+for i in range(2):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(("10.209.192.170", 5000))
     sock.send(b"GET /test HTTP/1.1\r\nHost:10.209.192.170\r\n\r\n")
@@ -90,7 +91,8 @@ for i in range(10):
         response += data.decode('utf-8')
     headers, body = response.split('\r\n\r\n', 1)
     print(body)
-    moveForward(500, 200)
+    move = json.loads(body, object_hook=MoveFinder.as_payload)
+    move.print
     sock.close()
 
 # Start the program
