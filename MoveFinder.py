@@ -12,6 +12,9 @@ class MoveClass:
 
     def print(self):
         print("Move is: " + self.type + ", amount is: " + str(self.speed) + ", Argument is: " + str(self.argument))
+    
+    def toString(self):
+        return "Move is: " + self.type + ", amount is: " + str(self.speed) + ", Argument is: " + str(self.argument)
 
 
 def as_payload(dct):
