@@ -12,6 +12,7 @@ import subprocess
 import json
 import MoveFinder
 import moveOptions
+import threading
 # from robotInfo import GameInfo
 
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
@@ -46,12 +47,9 @@ ramp_motor = Motor(Port.D)
   #  right_wheel_motor.run_angle(speed, ang)
 
 def turn(speed, ang):
-    if ang >= 0:
         left_wheel_motor.run_angle(speed, -ang, wait=False)
         right_wheel_motor.run_angle(speed, ang)
-    else:
-        left_wheel_motor.run_angle(speed, ang, wait=False)
-        right_wheel_motor.run_angle(speed, -ang)
+
 
 # method to move forwards
 def moveForward(speed, dist):
@@ -63,24 +61,50 @@ def moveBackward(speed, dist):
     right_wheel_motor.run_angle(speed, -dist, wait=False)
     left_wheel_motor.run_angle(speed, -dist)
 
+#Problems there are some problems about the ramp if the ramp closes to much it tries to spin the motor but cant and therefore the thread may get stuck 
+
 # make ramp open and clsoe at good speed and angle
 def openCloseHatch():
     ramp_motor.run_target(300, 100)
+    print("Openened the ramp")
     wait(2000)
-    ramp_motor.run_target(250, -90)
+    print("About to close the ramp")
+    ramp_motor.run_target(250, -20)
+    print("DEBUGGIN")
+    print("done using the latch")
 
 # collecting the balls at a good speed for a given time
 def collectBalls(time):
+    print("Collecting Balls")
     convey_motor.run_target(700, time, wait=False)
+    print("Done collecting Balls")
 
 # remove stuck balls if there is any
 def unstuckBall():
     convey_motor.run_target(200, -1000)
+# function for deciding and taking a move. 
+def takeMove(move):
+    if move.type==moveOptions.FORWARD:
+        moveForward(move.speed,move.argument)
+    if move.type==moveOptions.BACKWARD:
+        moveBackward(move.speed,move.argument)
+    if move.type==moveOptions.RIGHT:
+        turn(move.speed,-move.argument)
+    if move.type==moveOptions.LEFT:
+        turn(move.speed,move.argument)
+    if move.type==moveOptions.DELIVER:
+        openCloseHatch()
+    
+    
+    
 
 # Write your program here.
+#I am here starting a thread to take care of the conveyor
+pick_balls_thread=threading.Thread(target = collectBalls(500000))
+pick_balls_thread.start
 
 # ev3.speaker.beep()
-for i in range(2):
+for i in range(400):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(("10.209.192.170", 5000))
     sock.send(b"GET /test HTTP/1.1\r\nHost:10.209.192.170\r\n\r\n")
@@ -92,13 +116,12 @@ for i in range(2):
         response += data.decode('utf-8')
     headers, body = response.split('\r\n\r\n', 1)
     move = json.loads(body, object_hook=MoveFinder.as_payload)
-    print(move.toString())
-    print("Testing the types should be String int, int")
-    print(type(move.type))
-    print(type(move.speed))
-    print(type(move.argument))
+    print("Given move is: "+move.toString())
+    takeMove(move)
+    time.sleep(1)
     sock.close()
 
+    
 # Start the program
 # collectBalls(10000)
 # moveBackward(600, 200)
