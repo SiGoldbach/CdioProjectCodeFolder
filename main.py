@@ -97,11 +97,8 @@ def straight(distance):
     robot.straight(distance)
     
 def pickUpBallTest():
-    pick_balls_thread=threading.Thread(target = collectBalls(500000))
-    pick_balls_thread.start
-    robot.drive(200,0)
-    wait(400)
-    robot.stop()
+    angleMove(-7.6)
+    
    
 
 
@@ -122,10 +119,10 @@ def pickUpBallTest():
 def comp():
     pick_balls_thread=threading.Thread(target = collectBalls(500000))
     pick_balls_thread.start
-    for i in range(1):
+    for i in range(500):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect(("10.209.192.170", 5000))
-        sock.send(b"GET /test HTTP/1.1\r\nHost:10.209.192.170\r\n\r\n")
+        sock.send(b"GET / HTTP/1.1\r\nHost:10.209.192.170\r\n\r\n")
         response = ''
         while True:
             data = sock.recv(1024)
@@ -136,7 +133,6 @@ def comp():
         move = json.loads(body, object_hook=MoveFinder.as_payload)
         print("Given move is: "+move.toString())
         takeMove(move)
-        time.sleep(5)
         sock.close()
         
 
