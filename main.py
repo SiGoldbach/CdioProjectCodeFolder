@@ -27,11 +27,7 @@ left_wheel_motor = Motor(Port.A)
 right_wheel_motor = Motor(Port.B)
 convey_motor = Motor(Port.D)
 ramp_motor = Motor(Port.C)
-gyro=GyroSensor(Port.S2)
-robot = DriveBase(left_wheel_motor,right_wheel_motor,35,110)
-print("Calibarting gyro")
-wait(5000)
-
+robot = DriveBase(left_wheel_motor,right_wheel_motor,35,170)
 #I am here making a motor pair 
 
 
@@ -52,11 +48,6 @@ wait(5000)
 #def turnLeft(speed, ang):
  #   left_wheel_motor.run_angle(speed, -ang, wait=False)
   #  right_wheel_motor.run_angle(speed, ang)
-
-def turn(speed, ang):
-        left_wheel_motor.run_angle(speed, ang, wait=False)
-        right_wheel_motor.run_angle(speed, -ang)
-
 
 # method to move forwards
 def moveForward(speed, dist):
@@ -95,22 +86,27 @@ def takeMove(move):
         moveForward(move.speed,move.argument)
     if move.type==moveOptions.BACKWARD:
         moveBackward(move.speed,move.argument)
-    if move.type==moveOptions.RIGHT:
-        turn(move.speed,-move.argument)
-    if move.type==moveOptions.LEFT:
-        turn(move.speed,move.argument)
+    if move.type==moveOptions.TURN:
+        angleMove(move.argument)
     if move.type==moveOptions.DELIVER:
         openCloseHatch()
 
-def angleMove():
-    print(gyro.angle())
-    robot.drive(0, 180)
-    while gyro.angle()<90:
-        wait(10)
-    robot.stop
-    print(gyro.angle())
-
+def angleMove(angle):
+    robot.turn(angle)
+def straight(distance):
+    robot.straight(distance)
     
+def pickUpBallTest():
+    pick_balls_thread=threading.Thread(target = collectBalls(500000))
+    pick_balls_thread.start
+    robot.drive(200,0)
+    wait(400)
+    robot.stop()
+   
+
+
+    #openCloseHatch()
+
     
     
 # Write your program here.
@@ -118,36 +114,31 @@ def angleMove():
 
 #Here the current competition mode for the robot is written 
 
-    
-#Here is a function written to test the gyro 
-def gyroTest():
-    print(gyro.angle())
-    #angleMove()
-    #print(gyro.angle())
-    #print("Should be close to 0: ",gyro.speed())
-    
-angleMove()
+
+
 
 
 
 def comp():
     pick_balls_thread=threading.Thread(target = collectBalls(500000))
     pick_balls_thread.start
-   # for i in range(2):
-   # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-   # sock.connect(("10.209.192.170", 5000))
-   # sock.send(b"GET /test HTTP/1.1\r\nHost:10.209.192.170\r\n\r\n")
-   # response = ''
-   # while True:
-   #     data = sock.recv(1024)
-   #     if not data:
-   #         break
-   #     response += data.decode('utf-8')
-   # headers, body = response.split('\r\n\r\n', 1)
-   # move = json.loads(body, object_hook=MoveFinder.as_payload)
-   # print("Given move is: "+move.toString())
-   # takeMove(move)
-   # time.sleep(1)
-   # sock.close()
-    
+    for i in range(1):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect(("10.209.192.170", 5000))
+        sock.send(b"GET /test HTTP/1.1\r\nHost:10.209.192.170\r\n\r\n")
+        response = ''
+        while True:
+            data = sock.recv(1024)
+            if not data:
+             break
+            response += data.decode('utf-8')
+        headers, body = response.split('\r\n\r\n', 1)
+        move = json.loads(body, object_hook=MoveFinder.as_payload)
+        print("Given move is: "+move.toString())
+        takeMove(move)
+        time.sleep(5)
+        sock.close()
+        
+
+pickUpBallTest()
 
