@@ -27,7 +27,8 @@ left_wheel_motor = Motor(Port.A)
 right_wheel_motor = Motor(Port.B)
 convey_motor = Motor(Port.D)
 ramp_motor = Motor(Port.C)
-robot = DriveBase(left_wheel_motor,right_wheel_motor,35,170)
+robot = DriveBase(left_wheel_motor,right_wheel_motor,35,200)
+robot.settings(1000, 1000, 200, 200)
 #I am here making a motor pair 
 
 
@@ -65,7 +66,7 @@ def moveBackward(speed, dist):
 
 # make ramp open and clsoe at good speed and angle
 def openCloseHatch():
-    ramp_motor.run_target(300, -40)
+    ramp_motor.run_target(250, -80)
     print("Openened the ramp")
     wait(2000)
     print("About to close the ramp")
@@ -117,9 +118,11 @@ def belt_test():
     print("Doing the belt test")
     pick_balls_thread=threading.Thread(target = collectBalls(500000))
     pick_balls_thread.start
-    time.sleep(2)
-    moveForward(500, 1000)
-    moveForward(-500, 1000)
+    angleMove(-26)
+    
+        
+    
+
 
     
 
@@ -129,7 +132,7 @@ def belt_test():
 def comp():
     pick_balls_thread=threading.Thread(target = collectBalls(500000))
     pick_balls_thread.start
-    for i in range(1000):
+    for i in range(20):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect(("10.209.192.170", 5000))
         sock.send(b"GET /test HTTP/1.1\r\nHost:10.209.192.170\r\n\r\n")
@@ -147,5 +150,4 @@ def comp():
         sock.close()
         
 
-comp()
-
+belt_test()

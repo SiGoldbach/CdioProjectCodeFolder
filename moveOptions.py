@@ -5,3 +5,4 @@ BACKWARD = 'Backward'
 DELIVER = 'Deliver'
 UNSTUCK = 'Unstuck'
 START_CONVEYER = 'StartConveyer'
+ERROR = "Error"
