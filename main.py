@@ -28,7 +28,7 @@ right_wheel_motor = Motor(Port.B)
 convey_motor = Motor(Port.D)
 ramp_motor = Motor(Port.C)
 robot = DriveBase(left_wheel_motor,right_wheel_motor,35,200)
-robot.settings(1000, 1000, 200, 200)
+robot.settings(500, 500, 200, 200)
 #I am here making a motor pair 
 
 
@@ -50,13 +50,6 @@ robot.settings(1000, 1000, 200, 200)
  #   left_wheel_motor.run_angle(speed, -ang, wait=False)
   #  right_wheel_motor.run_angle(speed, ang)
 
-# method to move forwards
-def moveForward(speed, dist):
-   robot.drive(speed, 0)
-   wait(dist)
-   robot.stop()
-   
-
 # method to move backwards
 def moveBackward(speed, dist):
     right_wheel_motor.run_angle(speed, -dist, wait=False)
@@ -70,8 +63,7 @@ def openCloseHatch():
     print("Openened the ramp")
     wait(2000)
     print("About to close the ramp")
-    ramp_motor.run_target(250, 40)
-    print("DEBUGGIN")
+    ramp_motor.run_target(250, 20)
     print("done using the latch")
 
 # collecting the balls at a good speed for a given time
@@ -86,9 +78,9 @@ def unstuckBall():
 # function for deciding and taking a move. 
 def takeMove(move):
     if move.type==moveOptions.FORWARD:
-        moveForward(move.speed,move.argument)
+        straight(move.argument)
     if move.type==moveOptions.BACKWARD:
-        moveBackward(move.speed,move.argument)
+        straight(-move.argument)
     if move.type==moveOptions.TURN:
         angleMove(move.argument)
     if move.type==moveOptions.DELIVER:
@@ -104,7 +96,9 @@ def pickUpBallTest():
     
    
 
-
+def closeHatch():
+    ramp_motor.run_target(250, 80)
+    
     #openCloseHatch()
 
     
@@ -118,7 +112,11 @@ def belt_test():
     print("Doing the belt test")
     pick_balls_thread=threading.Thread(target = collectBalls(500000))
     pick_balls_thread.start
-    angleMove(-26)
+    for i in range(100):
+        openCloseHatch()
+
+
+    
     
         
     
@@ -130,9 +128,10 @@ def belt_test():
 
 
 def comp():
-    pick_balls_thread=threading.Thread(target = collectBalls(500000))
+    pick_balls_thread=threading.Thread(target = collectBalls(5000000))
     pick_balls_thread.start
-    for i in range(20):
+    for i in range(100):
+        print("Trying to get move")
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect(("10.209.192.170", 5000))
         sock.send(b"GET /test HTTP/1.1\r\nHost:10.209.192.170\r\n\r\n")
@@ -146,8 +145,7 @@ def comp():
         move = json.loads(body, object_hook=MoveFinder.as_payload)
         print("Given move is: "+move.toString())
         takeMove(move)
-        time.sleep(2)
+        wait(300)
         sock.close()
         
-
-belt_test()
+closeHatch()
