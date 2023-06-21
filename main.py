@@ -59,11 +59,11 @@ def moveBackward(speed, dist):
 
 # make ramp open and clsoe at good speed and angle
 def openCloseHatch():
-    ramp_motor.run_target(250, -80)
+    ramp_motor.run_target(250, -140)
     print("Openened the ramp")
-    wait(2000)
+    wait(3000)
     print("About to close the ramp")
-    ramp_motor.run_target(250, 20)
+    ramp_motor.run_time(250, 800)
     print("done using the latch")
 
 # collecting the balls at a good speed for a given time
@@ -86,6 +86,8 @@ def takeMove(move):
     if move.type==moveOptions.DELIVER:
         openCloseHatch()
 
+
+
 def angleMove(angle):
     robot.turn(angle)
 def straight(distance):
@@ -97,7 +99,7 @@ def pickUpBallTest():
    
 
 def closeHatch():
-    ramp_motor.run_target(250, 80)
+    ramp_motor.run_target(250, 20)
     
     #openCloseHatch()
 
@@ -109,11 +111,16 @@ def closeHatch():
 #Here the current competition mode for the robot is written 
 
 def belt_test():
+    straight(1400)
+    straight(-1200)
     print("Doing the belt test")
     pick_balls_thread=threading.Thread(target = collectBalls(500000))
     pick_balls_thread.start
-    for i in range(100):
-        openCloseHatch()
+    angleMove(-45)
+
+
+        
+       
 
 
     
@@ -128,7 +135,9 @@ def belt_test():
 
 
 def comp():
-    pick_balls_thread=threading.Thread(target = collectBalls(5000000))
+    straight(1400)
+    straight(-1200)
+    pick_balls_thread=threading.Thread(target = collectBalls(480000))
     pick_balls_thread.start
     for i in range(100):
         print("Trying to get move")
@@ -147,5 +156,6 @@ def comp():
         takeMove(move)
         wait(300)
         sock.close()
-        
-closeHatch()
+
+
+comp()
